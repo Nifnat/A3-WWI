@@ -1,0 +1,11 @@
+{
+  "name": "arma3-wwi-backend",
+  "version": "0.0.1",
+  "description": "Back end for the Arma 3 Whitelist Web Interface, designed as a lightweight package in order to enable adding and removing players from arma 3 whitelists. Designed as a simple back end",
+  "main": "index.js",
+  "scripts": {
+    "test": "test-ba"
+  },
+  "author": "Smackymander, Nifnat",
+  "license": "GPL-2.0-only"
+}
