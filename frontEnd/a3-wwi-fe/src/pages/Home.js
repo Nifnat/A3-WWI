@@ -75,25 +75,25 @@ function Home() {
   }
 
   function getName2(role) {
-    var MyArray = role.split('_');
-    if (MyArray.length >1){
-      switch (MyArray[0]) {
+    var roleSplit = role.split('_');
+    if (roleSplit.length >1){
+      switch (roleSplit[0]) {
         case "SR":
-          return `Sniper ${MyArray[1]}`;
+          return `Sniper ${roleSplit[1]}`;
         case "SF":
-          return `Operator ${MyArray[1]}`;
+          return `Operator ${roleSplit[1]}`;
         case "CO":
-          return `Armour Commander ${MyArray[1]}`;
+          return `Armour Commander ${roleSplit[1]}`;
         case "GN":
-          return `Armour Gunner ${MyArray[1]}`;
+          return `Armour Gunner ${roleSplit[1]}`;
         case "DR":
-          return `Armour Driver ${MyArray[1]}`;
+          return `Armour Driver ${roleSplit[1]}`;
         case "LO":
-          return `Armour Loader ${MyArray[1]}`;
+          return `Armour Loader ${roleSplit[1]}`;
         case "air":
-          return `Pilot ${MyArray[1]}`;
+          return `Pilot ${roleSplit[1]}`;
         case "cop":
-          return `Co-pilot ${MyArray[1]}`;
+          return `Co-pilot ${roleSplit[1]}`;
         default:
           return "Unkown";
       }
