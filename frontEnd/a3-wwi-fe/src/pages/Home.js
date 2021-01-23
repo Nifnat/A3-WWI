@@ -15,7 +15,7 @@ function Home() {
   }, []);
 
   function doApiCall() {
-    return { statusCode: 200, body: ["co", "rto", "JFO", "CM"] };
+    return { statusCode: 200, body: ["SR_1", "SR_2", "SF_1", "SF_2", "co"] };
   }
 
   //Probably a better way to designate the duplicate roles
@@ -74,6 +74,45 @@ function Home() {
     }
   }
 
+  function getName2(role) {
+    var MyArray = role.split('_');
+    if (MyArray.length >1){
+      switch (MyArray[0]) {
+        case "SR":
+          return `Sniper ${MyArray[1]}`;
+        case "SF":
+          return `Operator ${MyArray[1]}`;
+        case "CO":
+          return `Armour Commander ${MyArray[1]}`;
+        case "GN":
+          return `Armour Gunner ${MyArray[1]}`;
+        case "DR":
+          return `Armour Driver ${MyArray[1]}`;
+        case "LO":
+          return `Armour Loader ${MyArray[1]}`;
+        case "air":
+          return `Pilot ${MyArray[1]}`;
+        case "cop":
+          return `Co-pilot ${MyArray[1]}`;
+        default:
+          return "Unkown";
+      }
+    }else {
+      switch (role) {
+        case "co":
+          return "Commander";
+        case "rto":
+          return "???";
+        case "JFO":
+          return "???";
+        case "CM":
+          return "Combat Medic";
+        default:
+          return "Unkown";
+      }
+    }
+  }
+
   return (
     <div>
       <h1>Your Roles</h1>
@@ -90,7 +129,7 @@ function Home() {
             return (
               <tr>
                 <td>{role}</td>
-                <td>{getName(role)}</td>
+                <td>{getName2(role)}</td>
               </tr>
             );
           })}
