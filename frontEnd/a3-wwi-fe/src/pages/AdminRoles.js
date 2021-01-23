@@ -7,7 +7,7 @@ function AdminRoles() {
   const [usersList, setUsersList] = useState([]);
   const [userRoles, setUserRoles] = useState({});
 
-  const armaRoles = fetch("../Common/roles.Json");
+  const armaRoles = require("../Common/roles.Json");
 
   useEffect(() => {
     console.log(armaRoles);
