@@ -1,12 +1,16 @@
-import { DropdownButton } from "react-bootstrap";
+import { DropdownButton, Table, FormCheck } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
 
 function AdminRoles() {
   const [selectedUser, setSelectedUser] = useState("Select User");
   const [usersList, setUsersList] = useState([]);
+  const [userRoles, setUserRoles] = useState({});
+
+  const armaRoles = fetch("../Common/roles.Json");
 
   useEffect(() => {
+    console.log(armaRoles);
     let apiResponse = doApiCall();
     if (apiResponse.statusCode === 200) {
       setUsersList(apiResponse.body);
@@ -25,11 +29,20 @@ function AdminRoles() {
     };
   }
 
+  function doApiCallRoles(user) {
+    return {
+      statusCode: 200,
+      body: ["SR_1", "SR_2", "CO_1", "air_1", "CM"],
+    };
+  }
+
   function selectUser(user) {
     if (user.name === selectedUser) {
       setSelectedUser("Select User");
+      setUserRoles({});
     } else {
       setSelectedUser(user.name);
+      setUserRoles(doApiCallRoles(user.steamID));
     }
   }
 
@@ -45,6 +58,30 @@ function AdminRoles() {
           );
         })}
       </DropdownButton>
+
+      <Table striped bordered>
+        <thead>
+          <tr>
+            <th>Abreviation</th>
+            <th>Name</th>
+            <th>Selected</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* {armaRoles.map((role) => {
+            return (
+              <tr>
+                <td>{role.abbreviation}</td>
+                <td>{role.Name}</td>
+                <FormCheck
+                  id={role.abbreviation + "Checkbox"}
+                  checked={userRoles.includes(role.abbreviation) ? true : false}
+                />
+              </tr>
+            );
+          })} */}
+        </tbody>
+      </Table>
     </div>
   );
 }

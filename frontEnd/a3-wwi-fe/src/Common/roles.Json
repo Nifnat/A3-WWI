@@ -1,0 +1,22 @@
+[
+    { "abbreviation": "SR_1", "Name": "Sniper 1" },
+    { "abbreviation": "SR_2", "Name": "Sniper 2"},
+    { "abbreviation": "SF_1", "Name": "Operator 1"},
+    { "abbreviation": "SF_2", "Name": "Operator 2"},
+    { "abbreviation": "CO_1", "Name": "Armour Commander 1" },
+    { "abbreviation": "CO_2", "Name": "Armour Commander 2" },
+    { "abbreviation": "GN_1", "Name": "Armour Gunner 1"},
+    { "abbreviation": "GN_2", "Name": "Armour Gunner 2"},
+    { "abbreviation": "DR_1", "Name": "Armour Driver 1"},
+    { "abbreviation": "DR_2", "Name": "Armour Driver 2"},
+    { "abbreviation": "LO_1", "Name": "Armour Loader 1" },
+    { "abbreviation": "LO_2", "Name": "Armour Loader 2"},
+    { "abbreviation": "air_1", "Name": "Pilot 1"},
+    { "abbreviation": "air_2", "Name": "Pilot 2"},
+    { "abbreviation": "cop_1", "Name": "Co-Pilot 1" },
+    { "abbreviation": "cop_2", "Name": "Co-Pilot 2"},
+    { "abbreviation": "CO", "Name": "Commander (Infantry)"},
+    { "abbreviation": "rto", "Name": "???"},
+    { "abbreviation": "JFO", "Name": "???" },
+    { "abbreviation": "CM", "Name": "Combat Medic" }
+  ]
