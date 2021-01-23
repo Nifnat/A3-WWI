@@ -5,10 +5,10 @@ import React, { useState, useEffect } from "react";
 function AdminRoles() {
   const [selectedUser, setSelectedUser] = useState("Select User");
   const [usersList, setUsersList] = useState([]);
-  const [userRoles, setUserRoles] = useState({});
-  
-  const armaRoles = require("../Common/roles.json");
- 
+  const [userRoles, setUserRoles] = useState([]);
+
+  const armaRoles = require("../common/roles.json");
+
   useEffect(() => {
     console.log(armaRoles);
     let apiResponse = doApiCall();
@@ -39,10 +39,19 @@ function AdminRoles() {
   function selectUser(user) {
     if (user.name === selectedUser) {
       setSelectedUser("Select User");
-      setUserRoles({});
+      setUserRoles([]);
     } else {
       setSelectedUser(user.name);
       setUserRoles(doApiCallRoles(user.steamID));
+    }
+  }
+
+  function selectRole(role) {
+    if (userRoles.includes(role)) {
+      setUserRoles(userRoles.filter((i) => i !== role));
+    } else {
+      console.log("Miss");
+      setUserRoles([...userRoles, role]);
     }
   }
 
@@ -68,7 +77,7 @@ function AdminRoles() {
           </tr>
         </thead>
         <tbody>
-          {/* {armaRoles.map((role) => {
+          {armaRoles.map((role) => {
             return (
               <tr>
                 <td>{role.abbreviation}</td>
@@ -76,10 +85,11 @@ function AdminRoles() {
                 <FormCheck
                   id={role.abbreviation + "Checkbox"}
                   checked={userRoles.includes(role.abbreviation) ? true : false}
+                  onChange={() => selectRole(role.abbreviation)}
                 />
               </tr>
             );
-          })} */}
+          })}
         </tbody>
       </Table>
     </div>
