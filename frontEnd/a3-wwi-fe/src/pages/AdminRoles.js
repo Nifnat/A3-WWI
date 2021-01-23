@@ -1,4 +1,4 @@
-import { DropdownButton, Table, FormCheck } from "react-bootstrap";
+import { DropdownButton, Table, FormCheck, Button } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
 
@@ -33,6 +33,13 @@ function AdminRoles() {
     return {
       statusCode: 200,
       body: ["SR_1", "SR_2", "CO_1", "air_1", "CM"],
+    };
+  }
+
+  function doApiCallUpdate() {
+    return {
+      statusCode: 200,
+      body: "Success",
     };
   }
 
@@ -92,6 +99,7 @@ function AdminRoles() {
           })}
         </tbody>
       </Table>
+      <Button onclick={() => doApiCallUpdate()}>Submit</Button>
     </div>
   );
 }
