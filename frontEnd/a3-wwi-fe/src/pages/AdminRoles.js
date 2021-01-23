@@ -6,9 +6,9 @@ function AdminRoles() {
   const [selectedUser, setSelectedUser] = useState("Select User");
   const [usersList, setUsersList] = useState([]);
   const [userRoles, setUserRoles] = useState({});
-
-  const armaRoles = require("../Common/roles.Json");
-
+  
+  const armaRoles = require("../Common/roles.json");
+ 
   useEffect(() => {
     console.log(armaRoles);
     let apiResponse = doApiCall();
