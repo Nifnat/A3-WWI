@@ -4,8 +4,12 @@
   "description": "Back end for the Arma 3 Whitelist Web Interface, designed as a lightweight package in order to enable adding and removing players from arma 3 whitelists. Designed as a simple back end",
   "main": "index.js",
   "scripts": {
-    "test": "test-ba"
+    "test": "test-ba",
+    "start": "node index.js"
   },
   "author": "Smackymander, Nifnat",
-  "license": "GPL-2.0-only"
+  "license": "GPL-2.0-only",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
