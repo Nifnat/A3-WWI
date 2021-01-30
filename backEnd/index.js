@@ -25,16 +25,16 @@ api.get("/roles", (req, res) => {
   });
 });
 
-api.get("/role/:steamid", (req, res) => {
+api.get("/role", (req, res) => {
   var errors = [];
-  if (!req.params.steamid) {
+  if (!req.body.SteamID) {
     errors.push("No SteamID specified");
   }
   if (errors.length) {
     res.status(400).json({ error: errors.join(",") });
     return;
   }
-  const params = req.params.steamid;
+  const params = req.body.SteamID;
   const sql = "SELECT Game_Role FROM User WHERE Steam_ID = ?";
   db.get(sql, params, (err, row) => {
     if (err) {
@@ -46,9 +46,9 @@ api.get("/role/:steamid", (req, res) => {
   });
 });
 
-api.put("/role/:steamid", (req, res) => {
+api.post("/role", (req, res) => {
   var errors = [];
-  if (!req.params.steamid) {
+  if (!req.body.SteamID) {
     errors.push("No SteamID specified");
   }
   if (!req.body.GameRole) {
@@ -59,7 +59,7 @@ api.put("/role/:steamid", (req, res) => {
     return;
   }
   var data = {
-    SteamID: req.params.steamid,
+    SteamID: req.body.SteamID,
     GameRole: req.body.GameRole,
   };
   const sql = "INSERT INTO user (Steam_ID, Game_Role) VALUES (?,?)";
@@ -74,9 +74,9 @@ api.put("/role/:steamid", (req, res) => {
   });
 });
 
-api.patch("/role/:steamid", (req, res, next) => {
+api.patch("/role", (req, res, next) => {
   var errors = [];
-  if (!req.params.steamid) {
+  if (!req.body.SteamID) {
     errors.push("No SteamID specified");
   }
   if (!req.body.GameRole) {
@@ -88,7 +88,7 @@ api.patch("/role/:steamid", (req, res, next) => {
   }
   const data = {
     GameRole: req.body.GameRole,
-    SteamID: req.params.steamid,
+    SteamID: req.body.SteamID,
   };
   const sql = `UPDATE User set 
     Game_Role = COALESCE(?,Game_Role)
@@ -108,9 +108,9 @@ api.patch("/role/:steamid", (req, res, next) => {
   });
 });
 
-api.delete("/role/:steamid", (req, res, next) => {
+api.delete("/role", (req, res, next) => {
   var errors = [];
-  if (!req.params.steamid) {
+  if (!req.body.SteamID) {
     errors.push("No SteamID specified");
   }
   if (errors.length) {
@@ -118,7 +118,7 @@ api.delete("/role/:steamid", (req, res, next) => {
     return;
   }
   const sql = "DELETE FROM user WHERE Steam_ID = ?";
-  const params = req.params.steamid;
+  const params = req.body.SteamID;
   db.run(sql, params, (err, result) => {
     if (err) {
       console.log(err.message);
