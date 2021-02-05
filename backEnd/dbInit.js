@@ -1,5 +1,6 @@
 var sqlite3 = require("sqlite3").verbose();
-let testRole = `'"SR_1","SR_2"'`;
+let testRole1 = `'"SR_1","SR_2"'`;
+let testRole2 = `'"SR_1","SR_2","SF_1"'`
 let db = new sqlite3.Database("userDB.sqlite3", (err) => {
   if (err) {
     console.error(err.message);
@@ -15,12 +16,12 @@ db.serialize(function () {
 
 // Will throw error "Unique Constraint" if database already initialized, fine for testing.
 db.serialize(function () {
-  db.run(`INSERT INTO User VALUES (12345678, ${testRole})`, (err) => {
+  db.run(`INSERT INTO User VALUES (12345678, ${testRole1})`, (err) => {
     if (err) {
       console.error(err.message);
     }
   });
-  db.run(`INSERT INTO User VALUES (123456789, ${testRole})`, (err) => {
+  db.run(`INSERT INTO User VALUES (123456789, ${testRole2})`, (err) => {
     if (err) {
       console.error(err.message);
     }
