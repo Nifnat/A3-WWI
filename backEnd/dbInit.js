@@ -20,6 +20,11 @@ db.serialize(function () {
       console.error(err.message);
     }
   });
+  db.run(`INSERT INTO User VALUES (123456789, ${testRole})`, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+  });
 });
 
 module.exports = db;
