@@ -9,6 +9,18 @@ api.get("/", function (req, res) {
   res.send("Hello World!");
 });
 
+api.get("/users", (req, res) => {
+  const sql = "SELECT Steam_ID FROM User"
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.status(200).json({ Steam_IDs: rows })
+  });
+});
+
 api.get("/roles", (req, res) => {
   const sql = "SELECT * FROM User";
   db.all(sql, [], (err, rows) => {

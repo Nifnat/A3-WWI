@@ -10,24 +10,23 @@ function AdminRoles() {
   const armaRoles = require("../common/roles.json");
 
   useEffect(() => {
-    console.log(armaRoles);
-    let apiResponse = doApiCall();
-    if (apiResponse.statusCode === 200) {
-      setUsersList(apiResponse.body);
-    } else {
-      setUsersList([]);
+    setUsersList([]);
+    async function getUsers() {
+      await fetch("http://localhost:8000/users")
+        .then(response => response.json())
+        .then((jsonData) => {
+          let steam_ID_arr = []
+          for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
+            // If you want name + steam ID then you need to add name to db or use ID to get name
+            steam_ID_arr.push({name: jsonData['Steam_IDs'][i]['Steam_ID'].toString()})
+          }
+          console.log(steam_ID_arr)
+          setUsersList(steam_ID_arr)
+        });
     }
-  }, []);
 
-  function doApiCall() {
-    return {
-      statusCode: 200,
-      body: [
-        { name: "Jeff", steamID: "01234456789" },
-        { name: "Lilly", steamID: "09876543210" },
-      ],
-    };
-  }
+    getUsers();
+  }, []);
 
   function doApiCallRoles(user) {
     return {
