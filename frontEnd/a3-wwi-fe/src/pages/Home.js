@@ -7,7 +7,7 @@ function Home() {
 
   useEffect(() => {
     setRoles([]);
-    async function doApiCall() {
+    async function getRolesByID() {
       await fetch("http://localhost:8000/role/" + steamID)
         .then(response => response.json())
         .then((jsonData) => {
@@ -15,7 +15,7 @@ function Home() {
         });
     }
 
-    doApiCall();
+    getRolesByID();
   }, [steamID]);
 
   function getName(role) {
