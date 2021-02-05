@@ -15,25 +15,20 @@ function AdminRoles() {
       await fetch("http://localhost:8000/users")
         .then(response => response.json())
         .then((jsonData) => {
-          let steam_ID_arr = []
+          let steam_ID_arr = [];
           for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
             // If you want name + steam ID then you need to add name to db or use ID to get name
-            steam_ID_arr.push({name: jsonData['Steam_IDs'][i]['Steam_ID'].toString()})
+            steam_ID_arr.push({
+              name: jsonData['Steam_IDs'][i]['Steam_ID'].toString(),
+              steam_ID: jsonData['Steam_IDs'][i]['Steam_ID'].toString()
+            });
           }
-          console.log(steam_ID_arr)
-          setUsersList(steam_ID_arr)
+          setUsersList(steam_ID_arr);
         });
     }
 
     getUsers();
   }, []);
-
-  function doApiCallRoles(user) {
-    return {
-      statusCode: 200,
-      body: ["SR_1", "SR_2", "CO_1", "air_1", "CM"],
-    };
-  }
 
   function doApiCallUpdate() {
     return {
@@ -47,8 +42,15 @@ function AdminRoles() {
       setSelectedUser("Select User");
       setUserRoles([]);
     } else {
+      async function getRolesByID(steam_ID) {
+        await fetch("http://localhost:8000/role/" + steam_ID)
+          .then(response => response.json())
+          .then((jsonData) => {
+            setUserRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+          });
+      }
       setSelectedUser(user.name);
-      setUserRoles(doApiCallRoles(user.steamID).body);
+      getRolesByID(user.steam_ID)
     }
   }
 
