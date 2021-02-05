@@ -30,12 +30,26 @@ function AdminRoles() {
     getUsers();
   }, []);
 
-  function doApiCallUpdate() {
-    return {
-      statusCode: 200,
-      body: "Success",
-    };
+  function updateUsersRoles() {
+    const steam_ID = selectedUser
+    let roles = userRoles
+
+    roles = roles.length ? ('"' + roles.join('","') + '"') : '';
+    console.log(roles)
+
+    fetch("http://localhost:8000/role", {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        SteamID: steam_ID,
+        GameRole: roles
+      }),
+    });
   }
+
   //temp measure, should not be setting directly via body, but as a POC setting is done by body, no error handling is present.
   function selectUser(user) {
     if (user.name === selectedUser) {
@@ -58,7 +72,6 @@ function AdminRoles() {
     if (userRoles.includes(role)) {
       setUserRoles(userRoles.filter((i) => i !== role));
     } else {
-      console.log("Miss");
       setUserRoles([...userRoles, role]);
     }
   }
@@ -100,7 +113,7 @@ function AdminRoles() {
           })}
         </tbody>
       </Table>
-      <Button onclick={() => doApiCallUpdate()}>Submit</Button>
+      <Button onClick={() => updateUsersRoles()}>Submit</Button>
     </div>
   );
 }
