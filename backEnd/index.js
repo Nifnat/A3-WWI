@@ -5,6 +5,12 @@ var bodyParser = require("body-parser");
 api.use(bodyParser.urlencoded({ extended: false }));
 api.use(bodyParser.json());
 
+api.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 api.get("/", function (req, res) {
   res.send("Hello World!");
 });
@@ -35,7 +41,7 @@ api.get("/roles", (req, res) => {
 
 api.get("/role/:id?", (req, res) => {
   var errors = [];
-  var steamID = req.params.id;
+  const steamID = req.params.id;
   if (!steamID) {
     errors.push("No SteamID specified");
   }
