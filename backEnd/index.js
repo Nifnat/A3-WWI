@@ -5,12 +5,26 @@ var bodyParser = require("body-parser");
 api.use(bodyParser.urlencoded({ extended: false }));
 api.use(bodyParser.json());
 
+api.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 api.get("/", function (req, res) {
   res.send("Hello World!");
 });
 
-api.get("/secret", function (req, res) {
-  res.send("Beans are a nutritious food source!");
+api.get("/users", (req, res) => {
+  const sql = "SELECT Steam_ID FROM User"
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.status(200).json({ Steam_IDs: rows })
+  });
 });
 
 api.get("/roles", (req, res) => {
@@ -25,18 +39,18 @@ api.get("/roles", (req, res) => {
   });
 });
 
-api.get("/role", (req, res) => {
+api.get("/role/:id?", (req, res) => {
   var errors = [];
-  if (!req.body.SteamID) {
+  const steamID = req.params.id;
+  if (!steamID) {
     errors.push("No SteamID specified");
   }
   if (errors.length) {
     res.status(400).json({ error: errors.join(",") });
     return;
   }
-  const params = req.body.SteamID;
   const sql = "SELECT Game_Role FROM User WHERE Steam_ID = ?";
-  db.get(sql, params, (err, row) => {
+  db.get(sql, steamID, (err, row) => {
     if (err) {
       console.error(err.message);
       res.status(400).json({ error: err.message });
@@ -129,6 +143,6 @@ api.delete("/role", (req, res, next) => {
   });
 });
 
-api.listen(3000, function () {
-  console.log("Listening on port 3000 for calls...");
+api.listen(8000, function () {
+  console.log("Listening on port 8000 for calls...");
 });

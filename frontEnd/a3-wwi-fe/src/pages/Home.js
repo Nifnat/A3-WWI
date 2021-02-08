@@ -1,82 +1,49 @@
-import { Table } from "react-bootstrap";
+import { DropdownButton, Table } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
 
 function Home() {
+  const [selectedUser, setSelectedUser] = useState("Select User");
+  const [usersList, setUsersList] = useState([]);
   const [roles, setRoles] = useState([]);
-  let steamID = "Jeff";
+  let steamID = "";
 
   useEffect(() => {
-    let apiResponse = doApiCall();
-    if (apiResponse.statusCode === 200) {
-      setRoles(apiResponse.body);
-    } else {
-      setRoles([]);
+    setRoles([]);
+    async function getRolesByID() {
+      await fetch("http://localhost:8000/role/" + steamID)
+        .then(response => response.json())
+        .then((jsonData) => {
+          console.log(jsonData);
+          setRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+        });
     }
-  }, []);
+    if(steamID !== "") {
+      getRolesByID();
+    }
 
-  function doApiCall() {
-    return { statusCode: 200, body: ["SR_1", "SR_2", "SF_1", "SF_2", "co"] };
-  }
+    setUsersList([]);
+    async function getUsers() {
+      await fetch("http://localhost:8000/users")
+        .then(response => response.json())
+        .then((jsonData) => {
+          let steam_ID_arr = [];
+          for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
+            // If you want name + steam ID then you need to add name to db or use ID to get name
+            steam_ID_arr.push({
+              name: jsonData['Steam_IDs'][i]['Steam_ID'].toString(),
+              steam_ID: jsonData['Steam_IDs'][i]['Steam_ID'].toString()
+            });
+          }
+          setUsersList(steam_ID_arr);
+        });
+    }
+    getUsers();
+  }, [steamID]);
 
-  //Probably a better way to designate the duplicate roles
   function getName(role) {
-    switch (role) {
-      case "co":
-        return "Commander";
-      case "rto":
-        return "???";
-      case "JFO":
-        return "???";
-      case "CM":
-        return "Combat Medic";
-      case "SR_1":
-        return "Sniper (1)";
-      case "SR_2":
-        return "Sniper (2)";
-      case "SF_1":
-        return "Operator (1)";
-      case "SF_2":
-        return "Operator (2)";
-      case "SF_3":
-        return "Operator (3)";
-      case "SF_4":
-        return "Operator (4)";
-      case "CO_1":
-        return "Armour Commander (1)";
-      case "GN_1":
-        return "Armour Gunner (1)";
-      case "DR_1":
-        return "Armour Driver (1)";
-      case "LO_1":
-        return "Armour Loader (1)";
-      case "CO_2":
-        return "Armour Commander (2)";
-      case "GN_2":
-        return "Armour Gunner (2)";
-      case "DR_2":
-        return "Armour Driver (2)";
-      case "LO_2":
-        return "Armour Loader (2)";
-      case "air_1":
-        return "Pilot (1)";
-      case "Air_2":
-        return "Pilot (2)";
-      case "Air_3":
-        return "Pilot (3)";
-      case "cop_1":
-        return "Co-pilot (1)";
-      case "Cop_2":
-        return "Co-pilot (2)";
-      case "Cop_3":
-        return "Co-pilot (3)";
-      default:
-        return "Unkown";
-    }
-  }
-
-  function getName2(role) {
     var roleSplit = role.split('_');
-    if (roleSplit.length >1){
+    if (roleSplit.length > 1) {
       switch (roleSplit[0]) {
         case "SR":
           return `Sniper ${roleSplit[1]}`;
@@ -113,10 +80,40 @@ function Home() {
     }
   }
 
+  function selectUser(user) {
+    if (user.name === selectedUser) {
+      setSelectedUser("Select User");
+      steamID = ""
+      setRoles([]);
+    } else {
+      setSelectedUser(user.name);
+      steamID = user.steam_ID
+      setRoles([]);
+      async function getRolesByID() {
+        await fetch("http://localhost:8000/role/" + steamID)
+          .then(response => response.json())
+          .then((jsonData) => {
+            setRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+          });
+      }
+      if(steamID !== "") {
+        getRolesByID();
+      }
+    }
+  }
+
   return (
     <div>
       <h1>Your Roles</h1>
-      <h2>SteamID: {steamID}</h2>
+      <DropdownButton title={selectedUser}>
+        {usersList.map((user) => {
+          return (
+            <DropdownItem onClick={() => selectUser(user)}>
+              {user.name}
+            </DropdownItem>
+          );
+        })}
+      </DropdownButton>
       <Table striped bordered>
         <thead>
           <tr>
@@ -129,7 +126,7 @@ function Home() {
             return (
               <tr>
                 <td>{role}</td>
-                <td>{getName2(role)}</td>
+                <td>{getName(role)}</td>
               </tr>
             );
           })}

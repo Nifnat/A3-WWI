@@ -10,46 +10,61 @@ function AdminRoles() {
   const armaRoles = require("../common/roles.json");
 
   useEffect(() => {
-    console.log(armaRoles);
-    let apiResponse = doApiCall();
-    if (apiResponse.statusCode === 200) {
-      setUsersList(apiResponse.body);
-    } else {
-      setUsersList([]);
+    setUsersList([]);
+    async function getUsers() {
+      await fetch("http://localhost:8000/users")
+        .then(response => response.json())
+        .then((jsonData) => {
+          let steam_ID_arr = [];
+          for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
+            // If you want name + steam ID then you need to add name to db or use ID to get name
+            steam_ID_arr.push({
+              name: jsonData['Steam_IDs'][i]['Steam_ID'].toString(),
+              steam_ID: jsonData['Steam_IDs'][i]['Steam_ID'].toString()
+            });
+          }
+          setUsersList(steam_ID_arr);
+        });
     }
+
+    getUsers();
   }, []);
 
-  function doApiCall() {
-    return {
-      statusCode: 200,
-      body: [
-        { name: "Jeff", steamID: "01234456789" },
-        { name: "Lilly", steamID: "09876543210" },
-      ],
-    };
+  function updateUsersRoles() {
+    const steam_ID = selectedUser
+    let roles = userRoles
+
+    roles = roles.length ? ('"' + roles.join('","') + '"') : '';
+    console.log(roles)
+
+    fetch("http://localhost:8000/role", {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        SteamID: steam_ID,
+        GameRole: roles
+      }),
+    });
   }
 
-  function doApiCallRoles(user) {
-    return {
-      statusCode: 200,
-      body: ["SR_1", "SR_2", "CO_1", "air_1", "CM"],
-    };
-  }
-
-  function doApiCallUpdate() {
-    return {
-      statusCode: 200,
-      body: "Success",
-    };
-  }
   //temp measure, should not be setting directly via body, but as a POC setting is done by body, no error handling is present.
   function selectUser(user) {
     if (user.name === selectedUser) {
       setSelectedUser("Select User");
       setUserRoles([]);
     } else {
+      async function getRolesByID(steam_ID) {
+        await fetch("http://localhost:8000/role/" + steam_ID)
+          .then(response => response.json())
+          .then((jsonData) => {
+            setUserRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+          });
+      }
       setSelectedUser(user.name);
-      setUserRoles(doApiCallRoles(user.steamID).body);
+      getRolesByID(user.steam_ID)
     }
   }
 
@@ -57,7 +72,6 @@ function AdminRoles() {
     if (userRoles.includes(role)) {
       setUserRoles(userRoles.filter((i) => i !== role));
     } else {
-      console.log("Miss");
       setUserRoles([...userRoles, role]);
     }
   }
@@ -99,7 +113,7 @@ function AdminRoles() {
           })}
         </tbody>
       </Table>
-      <Button onclick={() => doApiCallUpdate()}>Submit</Button>
+      <Button onClick={() => updateUsersRoles()}>Submit</Button>
     </div>
   );
 }
