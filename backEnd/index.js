@@ -60,6 +60,29 @@ api.get("/role/:id?", (req, res) => {
   });
 });
 
+// Returns a string of the roles only
+api.get("/srole/:id?", (req, res) => {
+  var errors = [];
+  const steamID = req.params.id;
+  if (!steamID) {
+    errors.push("No SteamID specified");
+  }
+  if (errors.length) {
+    res.status(400).json({ error: errors.join(",") });
+    return;
+  }
+  const sql = "SELECT Game_Role FROM User WHERE Steam_ID = ?";
+  db.get(sql, steamID, (err, row) => {
+    if (err) {
+      console.error(err.message);
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.status(200).send(row['Game_Role'])
+  });
+});
+
+
 api.post("/role", (req, res) => {
   var errors = [];
   if (!req.body.SteamID) {
