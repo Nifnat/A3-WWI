@@ -5,9 +5,12 @@ var bodyParser = require("body-parser");
 api.use(bodyParser.urlencoded({ extended: false }));
 api.use(bodyParser.json());
 
-api.use(function(req, res, next) {
+api.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
@@ -16,14 +19,14 @@ api.get("/", function (req, res) {
 });
 
 api.get("/users", (req, res) => {
-  const sql = "SELECT Steam_ID FROM User"
+  const sql = "SELECT Steam_ID FROM User";
   db.all(sql, [], (err, rows) => {
     if (err) {
       console.error(err.message);
       res.status(400).json({ error: err.message });
       return;
     }
-    res.status(200).json({ Steam_IDs: rows })
+    res.status(200).json({ Steam_IDs: rows });
   });
 });
 
@@ -78,10 +81,9 @@ api.get("/srole/:id?", (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-    res.status(200).send(row['Game_Role'])
+    res.status(200).send("[" + row["Game_Role"] + "]");
   });
 });
-
 
 api.post("/role", (req, res) => {
   var errors = [];
