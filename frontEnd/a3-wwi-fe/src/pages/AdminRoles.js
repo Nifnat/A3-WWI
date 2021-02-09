@@ -1,4 +1,13 @@
-import { DropdownButton, Table, FormCheck, Button } from "react-bootstrap";
+import {
+  DropdownButton,
+  Table,
+  FormCheck,
+  Button,
+  Form,
+  FormGroup,
+  FormLabel,
+  FormControl,
+} from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
 
@@ -6,6 +15,7 @@ function AdminRoles() {
   const [selectedUser, setSelectedUser] = useState("Select User");
   const [usersList, setUsersList] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
+  const [newUserSteamID, setNewUserSteamID] = useState("");
 
   const armaRoles = require("../common/roles.json");
 
@@ -13,14 +23,14 @@ function AdminRoles() {
     setUsersList([]);
     async function getUsers() {
       await fetch("http://localhost:8000/users")
-        .then(response => response.json())
+        .then((response) => response.json())
         .then((jsonData) => {
           let steam_ID_arr = [];
-          for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
+          for (let i = 0; i < jsonData["Steam_IDs"].length; i++) {
             // If you want name + steam ID then you need to add name to db or use ID to get name
             steam_ID_arr.push({
-              name: jsonData['Steam_IDs'][i]['Steam_ID'].toString(),
-              steam_ID: jsonData['Steam_IDs'][i]['Steam_ID'].toString()
+              name: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
+              steam_ID: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
             });
           }
           setUsersList(steam_ID_arr);
@@ -31,21 +41,21 @@ function AdminRoles() {
   }, []);
 
   function updateUsersRoles() {
-    const steam_ID = selectedUser
-    let roles = userRoles
+    const steam_ID = selectedUser;
+    let roles = userRoles;
 
-    roles = roles.length ? ('"' + roles.join('","') + '"') : '';
-    console.log(roles)
+    roles = roles.length ? '"' + roles.join('","') + '"' : "";
+    console.log(roles);
 
     fetch("http://localhost:8000/role", {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         SteamID: steam_ID,
-        GameRole: roles
+        GameRole: roles,
       }),
     });
   }
@@ -58,13 +68,15 @@ function AdminRoles() {
     } else {
       async function getRolesByID(steam_ID) {
         await fetch("http://localhost:8000/role/" + steam_ID)
-          .then(response => response.json())
+          .then((response) => response.json())
           .then((jsonData) => {
-            setUserRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+            setUserRoles(
+              jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+            );
           });
       }
       setSelectedUser(user.name);
-      getRolesByID(user.steam_ID)
+      getRolesByID(user.steam_ID);
     }
   }
 
@@ -76,9 +88,53 @@ function AdminRoles() {
     }
   }
 
+  async function submitNewUser() {
+    console.log(newUserSteamID);
+    let dbresponse = await fetch("http://localhost:8000/role", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        SteamID: newUserSteamID,
+      }),
+    });
+
+    console.log(dbresponse);
+    if (dbresponse.status === 200) {
+      setNewUserSteamID("");
+    } else {
+      setNewUserSteamID("Error");
+    }
+  }
+
   return (
     <div>
       <h1>Admin Roles</h1>
+      <div>
+        <h2>Add new user to database</h2>
+        <Form>
+          <FormGroup>
+            <FormLabel>SteamID</FormLabel>
+            <FormControl
+              as="input"
+              placeholder="Enter SteamID64"
+              onChange={(e) => setNewUserSteamID(e.target.value)}
+              value={newUserSteamID}
+            ></FormControl>
+          </FormGroup>
+          <Button
+            onClick={() => {
+              submitNewUser();
+            }}
+          >
+            Submit
+          </Button>
+        </Form>
+      </div>
+
+      <h2>Change User Roles</h2>
       <DropdownButton title={selectedUser}>
         {usersList.map((user) => {
           return (
