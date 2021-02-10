@@ -11,12 +11,12 @@
     { "abbreviation": "DR_2", "Name": "Armour Driver 2"},
     { "abbreviation": "LO_1", "Name": "Armour Loader 1" },
     { "abbreviation": "LO_2", "Name": "Armour Loader 2"},
-    { "abbreviation": "air_1", "Name": "Pilot 1"},
-    { "abbreviation": "air_2", "Name": "Pilot 2"},
-    { "abbreviation": "cop_1", "Name": "Co-Pilot 1" },
-    { "abbreviation": "cop_2", "Name": "Co-Pilot 2"},
+    { "abbreviation": "AIR_1", "Name": "Pilot 1"},
+    { "abbreviation": "AIR_2", "Name": "Pilot 2"},
+    { "abbreviation": "COP_1", "Name": "Co-Pilot 1" },
+    { "abbreviation": "COP_2", "Name": "Co-Pilot 2"},
     { "abbreviation": "CO", "Name": "Commander (Infantry)"},
-    { "abbreviation": "rto", "Name": "???"},
+    { "abbreviation": "RTO", "Name": "???"},
     { "abbreviation": "JFO", "Name": "???" },
     { "abbreviation": "CM", "Name": "Combat Medic" }
   ]
