@@ -59,7 +59,11 @@ api.get("/role/:id?", (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-    res.status(200).json({ role: row });
+    if (row) {
+      res.status(200).send(row["Game_Role"]);
+    } else {
+      res.status(500).send();
+    }
   });
 });
 
