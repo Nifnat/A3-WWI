@@ -12,27 +12,29 @@ function Home() {
     setRoles([]);
     async function getRolesByID() {
       await fetch("http://localhost:8000/role/" + steamID)
-        .then(response => response.json())
+        .then((response) => response.json())
         .then((jsonData) => {
           console.log(jsonData);
-          setRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+          setRoles(
+            jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+          );
         });
     }
-    if(steamID !== "") {
+    if (steamID !== "") {
       getRolesByID();
     }
 
     setUsersList([]);
     async function getUsers() {
       await fetch("http://localhost:8000/users")
-        .then(response => response.json())
+        .then((response) => response.json())
         .then((jsonData) => {
           let steam_ID_arr = [];
-          for(let i = 0; i < jsonData['Steam_IDs'].length; i++) {
+          for (let i = 0; i < jsonData["Steam_IDs"].length; i++) {
             // If you want name + steam ID then you need to add name to db or use ID to get name
             steam_ID_arr.push({
-              name: jsonData['Steam_IDs'][i]['Steam_ID'].toString(),
-              steam_ID: jsonData['Steam_IDs'][i]['Steam_ID'].toString()
+              name: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
+              steam_ID: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
             });
           }
           setUsersList(steam_ID_arr);
@@ -42,7 +44,7 @@ function Home() {
   }, [steamID]);
 
   function getName(role) {
-    var roleSplit = role.split('_');
+    var roleSplit = role.split("_");
     if (roleSplit.length > 1) {
       switch (roleSplit[0]) {
         case "SR":
@@ -57,23 +59,25 @@ function Home() {
           return `Armour Driver ${roleSplit[1]}`;
         case "LO":
           return `Armour Loader ${roleSplit[1]}`;
-        case "air":
+        case "AIR":
           return `Pilot ${roleSplit[1]}`;
-        case "cop":
+        case "COP":
           return `Co-pilot ${roleSplit[1]}`;
         default:
           return "Unkown";
       }
-    }else {
+    } else {
       switch (role) {
-        case "co":
+        case "CO":
           return "Commander";
-        case "rto":
+        case "RTO":
           return "???";
         case "JFO":
           return "???";
         case "CM":
           return "Combat Medic";
+        case "EXA":
+          return "Extended Arsenal";
         default:
           return "Unkown";
       }
@@ -83,20 +87,22 @@ function Home() {
   function selectUser(user) {
     if (user.name === selectedUser) {
       setSelectedUser("Select User");
-      steamID = ""
+      steamID = "";
       setRoles([]);
     } else {
       setSelectedUser(user.name);
-      steamID = user.steam_ID
+      steamID = user.steam_ID;
       setRoles([]);
       async function getRolesByID() {
         await fetch("http://localhost:8000/role/" + steamID)
-          .then(response => response.json())
+          .then((response) => response.json())
           .then((jsonData) => {
-            setRoles(jsonData['role']['Game_Role'].replaceAll('"', '').split(','));
+            setRoles(
+              jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+            );
           });
       }
-      if(steamID !== "") {
+      if (steamID !== "") {
         getRolesByID();
       }
     }

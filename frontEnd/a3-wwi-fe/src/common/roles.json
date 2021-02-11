@@ -18,5 +18,6 @@
     { "abbreviation": "CO", "Name": "Commander (Infantry)"},
     { "abbreviation": "RTO", "Name": "???"},
     { "abbreviation": "JFO", "Name": "???" },
-    { "abbreviation": "CM", "Name": "Combat Medic" }
+    { "abbreviation": "CM", "Name": "Combat Medic" },
+    { "abbreviation": "EXA", "Name": "Extended Arsenal" }
   ]
