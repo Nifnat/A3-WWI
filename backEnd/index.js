@@ -1,18 +1,11 @@
 const express = require("express");
 var api = express();
+var cors = require("cors");
 var db = require("./dbinit.js");
 var bodyParser = require("body-parser");
 api.use(bodyParser.urlencoded({ extended: false }));
 api.use(bodyParser.json());
-
-api.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+api.use(cors());
 
 api.get("/", function (req, res) {
   res.send("Hello World!");
