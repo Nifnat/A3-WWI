@@ -66,13 +66,18 @@ function AdminRoles() {
       setSelectedUser("Select User");
       setUserRoles([]);
     } else {
-      async function getRolesByID(steam_ID) {
-        await fetch("http://localhost:8000/role/" + steam_ID)
+      async function getRolesByID() {
+        await fetch("http://localhost:8000/role/" + selectedUser)
           .then((response) => response.json())
           .then((jsonData) => {
-            setUserRoles(
-              jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
-            );
+            console.log(jsonData);
+            if (jsonData["role"]["Game_Role"] != null) {
+              setUserRoles(
+                jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+              );
+            } else {
+              setUserRoles([]);
+            }
           });
       }
       setSelectedUser(user.name);
