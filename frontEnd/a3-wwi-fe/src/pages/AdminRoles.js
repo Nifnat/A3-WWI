@@ -109,11 +109,32 @@ function AdminRoles() {
     }
   }
 
+  async function deleteUser() {
+    console.log(newUserSteamID);
+    let dbresponse = await fetch("http://localhost:8000/role", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        SteamID: newUserSteamID,
+      }),
+    });
+
+    console.log(dbresponse);
+    if (dbresponse.status === 200) {
+      setNewUserSteamID("");
+    } else {
+      setNewUserSteamID("Error");
+    }
+  }
+
   return (
     <div>
       <h1>Admin Roles</h1>
       <div>
-        <h2>Add new user to database</h2>
+        <h2>Add/Remove user from the database</h2>
         <Form>
           <FormGroup>
             <FormLabel>SteamID</FormLabel>
@@ -130,6 +151,13 @@ function AdminRoles() {
             }}
           >
             Submit
+          </Button>
+          <Button
+            onClick={() => {
+              deleteUser();
+            }}
+          >
+            Delete
           </Button>
         </Form>
       </div>
