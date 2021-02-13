@@ -92,7 +92,6 @@ api.post("/role", (req, res) => {
     errors.push("No SteamID specified");
   }
   if (!req.body.GameRole) {
-    req.body.GameRole = "";
   }
   if (errors.length) {
     res.status(400).json({ error: errors.join(",") });
