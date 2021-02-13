@@ -15,9 +15,13 @@ function Home() {
         .then((response) => response.json())
         .then((jsonData) => {
           console.log(jsonData);
-          setRoles(
-            jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
-          );
+          if (jsonData["role"]["Game_Role"] != null) {
+            setRoles(
+              jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+            );
+          } else {
+            setRoles([]);
+          }
         });
     }
     if (steamID !== "") {
@@ -97,9 +101,14 @@ function Home() {
         await fetch("http://localhost:8000/role/" + steamID)
           .then((response) => response.json())
           .then((jsonData) => {
-            setRoles(
-              jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
-            );
+            console.log(jsonData);
+            if (jsonData["role"]["Game_Role"] != null) {
+              setRoles(
+                jsonData["role"]["Game_Role"].replaceAll('"', "").split(",")
+              );
+            } else {
+              setRoles([]);
+            }
           });
       }
       if (steamID !== "") {
