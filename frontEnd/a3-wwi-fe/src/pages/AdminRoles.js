@@ -62,13 +62,15 @@ function AdminRoles() {
 
   //temp measure, should not be setting directly via body, but as a POC setting is done by body, no error handling is present.
   function selectUser(user) {
+    let userNameID = "";
     if (user.name === selectedUser) {
       setSelectedUser("Select User");
       setUserRoles([]);
     } else {
       setSelectedUser(user.name);
+      userNameID = user.name;
       async function getRolesByID() {
-        await fetch("http://localhost:8000/role/" + selectedUser)
+        await fetch("http://localhost:8000/role/" + userNameID)
           .then((response) => response.json())
           .then((jsonData) => {
             console.log(jsonData);
