@@ -66,6 +66,7 @@ function AdminRoles() {
       setSelectedUser("Select User");
       setUserRoles([]);
     } else {
+      setSelectedUser(user.name);
       async function getRolesByID() {
         await fetch("http://localhost:8000/role/" + selectedUser)
           .then((response) => response.json())
@@ -80,7 +81,6 @@ function AdminRoles() {
             }
           });
       }
-      setSelectedUser(user.name);
       getRolesByID(user.steam_ID);
     }
   }
