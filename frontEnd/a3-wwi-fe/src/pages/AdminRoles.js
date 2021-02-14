@@ -7,6 +7,9 @@ import {
   FormGroup,
   FormLabel,
   FormControl,
+  Container,
+  Row,
+  Col,
 } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
@@ -116,8 +119,8 @@ function AdminRoles() {
     }
   }
 
-  async function deleteUser() {
-    console.log(newUserSteamID);
+  async function deleteUser(user) {
+    console.log(user);
     let dbresponse = await fetch("http://localhost:8000/role", {
       method: "DELETE",
       headers: {
@@ -125,7 +128,7 @@ function AdminRoles() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        SteamID: newUserSteamID,
+        SteamID: user,
       }),
     });
 
@@ -170,16 +173,26 @@ function AdminRoles() {
       </div>
 
       <h2>Change User Roles</h2>
-      <DropdownButton title={selectedUser}>
-        {usersList.map((user) => {
-          return (
-            <DropdownItem onClick={() => selectUser(user)}>
-              {user.name}
-            </DropdownItem>
-          );
-        })}
-      </DropdownButton>
-
+      <Container>
+        <Row xs={10} md={10} lg={10}>
+          <DropdownButton title={selectedUser}>
+            {usersList.map((user) => {
+              return (
+                <DropdownItem onClick={() => selectUser(user)}>
+                  {user.name}
+                </DropdownItem>
+              );
+            })}
+          </DropdownButton>
+          <Button
+            onClick={() => {
+              deleteUser(selectedUser);
+            }}
+          >
+            Delete User
+          </Button>
+        </Row>
+      </Container>
       <Table striped bordered>
         <thead>
           <tr>
