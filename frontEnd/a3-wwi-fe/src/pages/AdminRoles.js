@@ -144,7 +144,7 @@ function AdminRoles() {
     <div>
       <h1>Admin Roles</h1>
       <div>
-        <h2>Add/Remove user from the database</h2>
+        <h2>Add user into the database</h2>
         <Form>
           <FormGroup>
             <FormLabel>SteamID</FormLabel>
@@ -166,26 +166,25 @@ function AdminRoles() {
       </div>
 
       <h2>Change User Roles</h2>
-      <Container>
-        <Row xs={10} md={10} lg={10}>
-          <DropdownButton title={selectedUser}>
-            {usersList.map((user) => {
-              return (
-                <DropdownItem onClick={() => selectUser(user)}>
-                  {user.name}
-                </DropdownItem>
-              );
-            })}
-          </DropdownButton>
-          <Button
-            onClick={() => {
-              deleteUser(selectedUser);
-            }}
-          >
-            Delete User
-          </Button>
-        </Row>
-      </Container>
+
+      <div style={{ display: "flex" }}>
+        <DropdownButton title={selectedUser}>
+          {usersList.map((user) => {
+            return (
+              <DropdownItem onClick={() => selectUser(user)}>
+                {user.name}
+              </DropdownItem>
+            );
+          })}
+        </DropdownButton>
+        <Button
+          onClick={() => {
+            deleteUser(selectedUser);
+          }}
+        >
+          Delete User
+        </Button>
+      </div>
       <Table striped bordered>
         <thead>
           <tr>
