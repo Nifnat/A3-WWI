@@ -162,13 +162,6 @@ function AdminRoles() {
           >
             Submit
           </Button>
-          <Button
-            onClick={() => {
-              deleteUser();
-            }}
-          >
-            Delete
-          </Button>
         </Form>
       </div>
 
