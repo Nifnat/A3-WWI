@@ -139,6 +139,7 @@ function AdminRoles() {
     } else {
       setNewUserSteamID("Error");
     }
+    getUsers();
   }
 
   return (
