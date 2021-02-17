@@ -7,9 +7,6 @@ import {
   FormGroup,
   FormLabel,
   FormControl,
-  Container,
-  Row,
-  Col,
 } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import React, { useState, useEffect } from "react";
@@ -23,9 +20,8 @@ function AdminRoles() {
   const armaRoles = require("../common/roles.json");
 
   useEffect(() => {
-    setUsersList([]);
     getUsers();
-  }, []);
+  });
 
   async function getUsers() {
     await fetch("http://localhost:8000/users")
@@ -140,6 +136,7 @@ function AdminRoles() {
       setNewUserSteamID("Error");
     }
     getUsers();
+    setSelectedUser("Select User");
   }
 
   return (
