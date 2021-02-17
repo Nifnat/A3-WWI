@@ -24,24 +24,24 @@ function AdminRoles() {
 
   useEffect(() => {
     setUsersList([]);
-    async function getUsers() {
-      await fetch("http://localhost:8000/users")
-        .then((response) => response.json())
-        .then((jsonData) => {
-          let steam_ID_arr = [];
-          for (let i = 0; i < jsonData["Steam_IDs"].length; i++) {
-            // If you want name + steam ID then you need to add name to db or use ID to get name
-            steam_ID_arr.push({
-              name: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
-              steam_ID: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
-            });
-          }
-          setUsersList(steam_ID_arr);
-        });
-    }
-
     getUsers();
   }, []);
+
+  async function getUsers() {
+    await fetch("http://localhost:8000/users")
+      .then((response) => response.json())
+      .then((jsonData) => {
+        let steam_ID_arr = [];
+        for (let i = 0; i < jsonData["Steam_IDs"].length; i++) {
+          // If you want name + steam ID then you need to add name to db or use ID to get name
+          steam_ID_arr.push({
+            name: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
+            steam_ID: jsonData["Steam_IDs"][i]["Steam_ID"].toString(),
+          });
+        }
+        setUsersList(steam_ID_arr);
+      });
+  }
 
   function updateUsersRoles() {
     const steam_ID = selectedUser;
@@ -117,6 +117,7 @@ function AdminRoles() {
     } else {
       setNewUserSteamID("Error");
     }
+    getUsers();
   }
 
   async function deleteUser(user) {
@@ -144,7 +145,7 @@ function AdminRoles() {
     <div>
       <h1>Admin Roles</h1>
       <div>
-        <h2>Add/Remove user from the database</h2>
+        <h2>Add user into the database</h2>
         <Form>
           <FormGroup>
             <FormLabel>SteamID</FormLabel>
@@ -162,37 +163,29 @@ function AdminRoles() {
           >
             Submit
           </Button>
-          <Button
-            onClick={() => {
-              deleteUser();
-            }}
-          >
-            Delete
-          </Button>
         </Form>
       </div>
 
       <h2>Change User Roles</h2>
-      <Container>
-        <Row xs={10} md={10} lg={10}>
-          <DropdownButton title={selectedUser}>
-            {usersList.map((user) => {
-              return (
-                <DropdownItem onClick={() => selectUser(user)}>
-                  {user.name}
-                </DropdownItem>
-              );
-            })}
-          </DropdownButton>
-          <Button
-            onClick={() => {
-              deleteUser(selectedUser);
-            }}
-          >
-            Delete User
-          </Button>
-        </Row>
-      </Container>
+
+      <div style={{ display: "flex" }}>
+        <DropdownButton title={selectedUser}>
+          {usersList.map((user) => {
+            return (
+              <DropdownItem onClick={() => selectUser(user)}>
+                {user.name}
+              </DropdownItem>
+            );
+          })}
+        </DropdownButton>
+        <Button
+          onClick={() => {
+            deleteUser(selectedUser);
+          }}
+        >
+          Delete User
+        </Button>
+      </div>
       <Table striped bordered>
         <thead>
           <tr>
